@@ -1,0 +1,55 @@
+# Made by Rider
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+# Rider
+.idea/
+*.sln.iml
+*.sln.DotSettings*
+/out/
+/tmp/
+/workspace.xml
+
+# Visual Studio
+*.vs/
+.vscode/
+*.user
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.cache
+
+# Build
+bin/
+obj/
+*.log
+*.cache
+*.pdb
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+global.json
+.nuget/
+
+# dotnet
+*.dll
+*.exe
+*.app
+*.db
+*.db-journal
+
+# Rider settings
+/.idea/
+/.idea/*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Debug
+*.bak
+*.swp
+*.pid
