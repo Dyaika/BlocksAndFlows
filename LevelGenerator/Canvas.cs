@@ -1,3 +1,5 @@
+using LevelCore;
+
 namespace LevelGenerator;
 
 public class Canvas

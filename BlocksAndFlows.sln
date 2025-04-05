@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaletteGenerator", "Palette
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorBlindnessSimulator", "ColorBlindnessSimulator\ColorBlindnessSimulator.csproj", "{FE179850-F6B8-48C2-965B-A9C8E3775B64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelCore", "LevelCore\LevelCore.csproj", "{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{FE179850-F6B8-48C2-965B-A9C8E3775B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE179850-F6B8-48C2-965B-A9C8E3775B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE179850-F6B8-48C2-965B-A9C8E3775B64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
