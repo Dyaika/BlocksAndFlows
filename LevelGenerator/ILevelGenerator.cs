@@ -1,4 +1,4 @@
-using LevelCore;
+using LevelCore.Models;
 
 namespace LevelGenerator;
 
@@ -13,5 +13,6 @@ public interface ILevelGenerator
         int width = DEFAULT_WIDTH,
         int height = DEFAULT_HEIGHT,
         byte colors = DEFAULT_COLORS_COUNT,
-        byte shapes = DEFAULT_SHAPES_COUNT);
+        byte shapes = DEFAULT_SHAPES_COUNT,
+        bool disassemble = false);
 }

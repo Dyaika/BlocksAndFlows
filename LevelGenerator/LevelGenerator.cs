@@ -1,11 +1,13 @@
-using LevelCore;
+using LevelCore.Infrastructure;
+using LevelCore.Models;
 
 namespace LevelGenerator;
 
-public class LevelGenerator: ILevelGenerator
+public class LevelGenerator : ILevelGenerator
 {
     private const int FILTERS_HOLES_RATIO = 2;
-    public Level GenerateLevel(int width, int height, byte colors, byte shapes)
+
+    public Level GenerateLevel(int width, int height, byte colors, byte shapes, bool disassemble)
     {
         var matrix = new Filter?[width, height];
 
@@ -22,7 +24,15 @@ public class LevelGenerator: ILevelGenerator
         GenerateTopRow(colors, shapes, matrix);
 
         PrintMatrix(matrix); // delete this
-        throw new NotImplementedException();
+
+        // Make level
+        var level = new Level(width, height, MatrixToBlocks(matrix));
+        if (disassemble)
+        {
+            level.Disassemble();
+        }
+
+        return level;
     }
 
     private void GenerateMiddleRows(byte colors, byte shapes, Filter?[,] matrix)
@@ -35,7 +45,7 @@ public class LevelGenerator: ILevelGenerator
             {
                 if (matrix[col, row] != null)
                 {
-                    matrix[col, row] = GenerateMatchingFilter(matrix[col, height-1], colors: colors, shapes: shapes);
+                    matrix[col, row] = GenerateMatchingFilter(matrix[col, height - 1], colors: colors, shapes: shapes);
                     // Top row is used as mask to remember previous filters through spaces, it will be changed later
                     matrix[col, height - 1] = new Filter(matrix[col, row]);
                 }
@@ -73,7 +83,7 @@ public class LevelGenerator: ILevelGenerator
     {
         var width = matrix.GetLength(0);
         var height = matrix.GetLength(1);
-        // initialise all filters with temporary values
+        // Initialise all filters with temporary values
         for (var row = 0; row < height; row++)
         {
             for (var col = 0; col < width; col++)
@@ -81,6 +91,7 @@ public class LevelGenerator: ILevelGenerator
                 matrix[col, row] = new Filter(0, 0);
             }
         }
+
         var rand = new Random();
         for (var i = 0; i < width * height / FILTERS_HOLES_RATIO; i++)
         {
@@ -96,19 +107,74 @@ public class LevelGenerator: ILevelGenerator
         rand.NextBytes(buffer);
         if (buffer[0] % 2 == 0)
         {
-            // save shape, change color
+            // Save shape, change color
             return new Filter(colorId: (byte)(buffer[1] % colors), shapeId: prev.ShapeId);
         }
 
-        // save color, change shape
+        // Save color, change shape
         return new Filter(colorId: prev.ColorId, shapeId: (byte)(buffer[1] % shapes));
+    }
+
+    private Block[] MatrixToBlocks(Filter?[,] matrix)
+    {
+        var width = matrix.GetLength(0);
+        var height = matrix.GetLength(1);
+        var blocks = new List<Block>();
+        var filters = new List<Filter>();
+        var offset = 0;
+        // Bottom
+        for (var col = 0; col < width; col++)
+        {
+            filters.Add(new Filter(matrix[col, 0]));
+        }
+
+        blocks.Add(new Block(filters.ToArray(), offset, BlockType.Receiver, true));
+
+        // Middle
+        for (var row = 1; row < height - 1; row++)
+        {
+            filters.Clear();
+            offset = width * row;
+            for (var col = 0; col < width; col++)
+            {
+                if (matrix[col, row] != null)
+                {
+                    filters.Add(new Filter(matrix[col, row]));
+                }
+                else
+                {
+                    if (filters.Count > 0)
+                    {
+                        blocks.Add(new Block(filters.ToArray(), offset, BlockType.Converter, false));
+                        filters.Clear();
+                        offset = width * row + col + 1;
+                    }
+                }
+            }
+
+            if (filters.Count > 0)
+            {
+                blocks.Add(new Block(filters.ToArray(), offset, BlockType.Converter, false));
+                filters.Clear();
+            }
+        }
+
+        // Top
+        offset = width * (height - 1);
+        for (var col = 0; col < width; col++)
+        {
+            filters.Add(new Filter(matrix[col, height - 1]));
+        }
+
+        blocks.Add(new Block(filters.ToArray(), offset, BlockType.Producer, true));
+        return blocks.ToArray();
     }
 
     private void PrintMatrix(Filter?[,] matrix)
     {
         var width = matrix.GetLength(0);
         var height = matrix.GetLength(1);
-        for (var row = height-1; row >= 0; row--)
+        for (var row = height - 1; row >= 0; row--)
         {
             for (var col = 0; col < width; col++)
             {
@@ -121,6 +187,7 @@ public class LevelGenerator: ILevelGenerator
                     Console.Write($"**\t");
                 }
             }
+
             Console.WriteLine();
         }
     }

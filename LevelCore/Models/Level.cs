@@ -1,4 +1,4 @@
-namespace LevelCore
+namespace LevelCore.Models
 {
     /// <summary>
     /// Structure of game level
