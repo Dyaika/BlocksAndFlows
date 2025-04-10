@@ -147,8 +147,8 @@ public class LevelGenerator : ILevelGenerator
                     {
                         blocks.Add(new Block(filters.ToArray(), offset, BlockType.Converter, false));
                         filters.Clear();
-                        offset = width * row + col + 1;
                     }
+                    offset = width * row + col + 1;
                 }
             }
 
