@@ -12,11 +12,14 @@ public static class LevelGenTest
         Console.WriteLine("-----Generating level-----");
         var level = g.GenerateLevel();
         Console.WriteLine("-----Level generated-----");
-        PrintMatrix(level.AsGameMatrix());
-        Console.WriteLine("-----Disassembling level-----");
+        PrintMatrix(level.SimulateAsMatrix());
+        Console.WriteLine("-----Score-----");
+        Console.WriteLine(level.CalculateResult().Score);
         level.Disassemble();
         Console.WriteLine("-----Level disassembled-----");
-        PrintMatrix(level.AsGameMatrix());
+        PrintMatrix(level.SimulateAsMatrix());
+        Console.WriteLine("-----Score-----");
+        Console.WriteLine(level.CalculateResult().Score);
     }
 
     private static void PrintMatrix(Filter?[,] matrix)
@@ -29,11 +32,19 @@ public static class LevelGenTest
             {
                 if (matrix[col, row] != null)
                 {
-                    Console.Write($"{matrix[col, row].ColorId}{matrix[col, row].ShapeId}\t");
+                    if (matrix[col, row].IsBroken)
+                    {
+                        
+                        Console.Write($"XX\t");
+                    }
+                    else
+                    {
+                        Console.Write($"{matrix[col, row].ColorId}{matrix[col, row].ShapeId}\t");
+                    }
                 }
                 else
                 {
-                    Console.Write($"**\t");
+                    Console.Write($"  \t");
                 }
             }
 
