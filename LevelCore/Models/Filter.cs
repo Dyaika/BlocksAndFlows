@@ -6,12 +6,12 @@ namespace LevelCore.Models
     public class Filter
     {
         /// <summary>
-        /// Color identificator
+        /// Color identifier
         /// </summary>
         public byte ColorId { get; }
 
         /// <summary>
-        /// Shape identificator
+        /// Shape identifier
         /// </summary>
         public byte ShapeId { get; }
         
