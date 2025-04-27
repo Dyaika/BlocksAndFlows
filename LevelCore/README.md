@@ -4,10 +4,12 @@ class LevelManipulator  {
 <<class>>
 +Disassemble(Level level)
 +Filter[,] AsGameMatrix(Level level)
++MoveBlock(Level level, Block block)
++Hint(Level current, Level solution)
 }
 class LevelChecker {
 <<class>>
-+SimulateAsMatrix(Level level)
++Filter[,] SimulateAsMatrix(Level level)
 +Result CalculateResult(Level level)
 }
 
