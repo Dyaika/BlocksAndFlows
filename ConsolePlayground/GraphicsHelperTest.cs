@@ -1,5 +1,6 @@
 using System.Drawing;
 using GraphicsHelper;
+using Microsoft.Extensions.DependencyInjection;
 using PaletteGenerator.ColorConverter;
 using PaletteGenerator.ColorConverter.ColorSpaces;
 using SixLabors.ImageSharp.PixelFormats;
@@ -9,10 +10,10 @@ namespace ConsolePlayground;
 
 public static class GraphicsHelperTest
 {
-    public static void Run()
+    public static void Run(ServiceProvider provider)
     {
-        IImageConverter ic = new ImageConverter();
-        IColorConverter cc = new ColorMineColorConverter();
+        IImageConverter ic = provider.GetService<IImageConverter>();
+        IColorConverter cc = provider.GetService<IColorConverter>();
         var img = ic.ImageToMatrix("/home/lesch4000/Загрузки/ImageInput.png");
         for (var i = 0; i < img.GetLength(0); i++)
         {

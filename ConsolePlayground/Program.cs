@@ -2,4 +2,5 @@
 
 using ConsolePlayground;
 
-GraphicsHelperTest.Run();
+var provider = DIContainer.RegisterServices();
+PaletteGeneratorTest.Run(provider);

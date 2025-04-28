@@ -6,6 +6,36 @@ namespace PaletteGenerator.ColorConverter.ColorSpaces
     public class CIELabColor
     {
         /// <summary>
+        /// Minimal L value
+        /// </summary>
+        public static double MinL => 0.0;
+
+        /// <summary>
+        /// Maximal L value
+        /// </summary>
+        public static double MaxL => 100.0;
+
+        /// <summary>
+        /// Minimal a value
+        /// </summary>
+        public static double MinA => -128.0;
+
+        /// <summary>
+        /// Maximal a value
+        /// </summary>
+        public static double MaxA => 128.0;
+
+        /// <summary>
+        /// Minimal b value
+        /// </summary>
+        public static double MinB => -128.0;
+
+        /// <summary>
+        /// Maximal b value
+        /// </summary>
+        public static double MaxB => 128.0;
+
+        /// <summary>
         /// Lightness
         /// </summary>
         public double L { get; set; }

@@ -1,14 +1,15 @@
 using LevelCore.Infrastructure;
 using LevelCore.Models;
 using LevelGenerator;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsolePlayground;
 
 public static class LevelGenTest
 {
-    public static void Run()
+    public static void Run(ServiceProvider provider)
     {
-        ILevelGenerator g = new LevelGenerator.LevelGenerator();
+        ILevelGenerator g = provider.GetService<ILevelGenerator>();
         Console.WriteLine("-----Generating level-----");
         var level = g.GenerateLevel();
         Console.WriteLine("-----Level generated-----");
