@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorBlindnessSimulator", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelCore", "LevelCore\LevelCore.csproj", "{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicsHelper", "GraphicsHelper\GraphicsHelper.csproj", "{5EEFB88A-6308-4365-874C-0FB38F024249}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorSpaces", "ColorSpaces\ColorSpaces.csproj", "{4608F74C-094E-4F8F-B151-8885475495F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A5DBFB4-621C-4EC0-B6A6-978B95256EF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EEFB88A-6308-4365-874C-0FB38F024249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EEFB88A-6308-4365-874C-0FB38F024249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EEFB88A-6308-4365-874C-0FB38F024249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EEFB88A-6308-4365-874C-0FB38F024249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4608F74C-094E-4F8F-B151-8885475495F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4608F74C-094E-4F8F-B151-8885475495F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4608F74C-094E-4F8F-B151-8885475495F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4608F74C-094E-4F8F-B151-8885475495F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -5,4 +5,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="ColorMine" Version="1.1.3" />
+    </ItemGroup>
+
 </Project>

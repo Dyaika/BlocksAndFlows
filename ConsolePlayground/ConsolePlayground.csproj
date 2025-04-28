@@ -8,7 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ColorSpaces\ColorSpaces.csproj" />
+      <ProjectReference Include="..\GraphicsHelper\GraphicsHelper.csproj" />
       <ProjectReference Include="..\LevelGenerator\LevelGenerator.csproj" />
+      <ProjectReference Include="..\PaletteGenerator\PaletteGenerator.csproj" />
     </ItemGroup>
 
 </Project>

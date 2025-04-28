@@ -2,4 +2,4 @@
 
 using ConsolePlayground;
 
-LevelGenTest.Run();
+GraphicsHelperTest.Run();
