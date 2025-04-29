@@ -12,19 +12,37 @@ public static class PaletteGeneratorTest
         IPaletteGenerator pg = provider.GetService<IPaletteGenerator>() ?? throw new InvalidOperationException();
         IImageConverter ic = provider.GetService<IImageConverter>() ?? throw new InvalidOperationException();
 
-        var n = 5;
-        var paletteMatrix = new Rgba32[50, 50 * n];
-
-        var palette = pg.GeneratePalette(n, ColorBlindnessType.Monochromacy).Select(Rgba32.ParseHex).ToArray();
-
-        for (int colorIndex = 0; colorIndex < n; colorIndex++)
+        var n = 5; // Количество цветов в одной палитре
+        var types = new[]
         {
-            for (int y = 0; y < 50; y++)
+            ColorBlindnessType.None,
+            ColorBlindnessType.Protanopy,
+            ColorBlindnessType.Deuteranopy,
+            ColorBlindnessType.Tritanopy,
+            ColorBlindnessType.Monochromacy
+        };
+
+        int paletteHeight = 50;
+        int paletteWidth = 50 * n;
+
+        var paletteMatrix = new Rgba32[paletteHeight * types.Length, paletteWidth];
+
+        for (int typeIndex = 0; typeIndex < types.Length; typeIndex++)
+        {
+            var palette = pg.GeneratePalette(n, types[typeIndex])
+                .Select(Rgba32.ParseHex)
+                .ToArray();
+
+            for (int colorIndex = 0; colorIndex < n; colorIndex++)
             {
-                for (int x = 0; x < 50; x++)
+                for (int y = 0; y < paletteHeight; y++)
                 {
-                    int matrixX = colorIndex * 50 + x;
-                    paletteMatrix[y, matrixX] = palette[colorIndex];
+                    for (int x = 0; x < 50; x++)
+                    {
+                        int matrixX = colorIndex * 50 + x;
+                        int matrixY = typeIndex * paletteHeight + y;
+                        paletteMatrix[matrixY, matrixX] = palette[colorIndex];
+                    }
                 }
             }
         }
