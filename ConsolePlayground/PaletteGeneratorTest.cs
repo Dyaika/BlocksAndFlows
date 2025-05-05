@@ -47,6 +47,6 @@ public static class PaletteGeneratorTest
             }
         }
 
-        ic.MatrixToImage(paletteMatrix, "/home/lesch4000/Загрузки/ImagePalette.png");
+        ic.MatrixToImage(paletteMatrix, "C:\\Users\\razch\\Downloads/ImagePalette.png");
     }
 }

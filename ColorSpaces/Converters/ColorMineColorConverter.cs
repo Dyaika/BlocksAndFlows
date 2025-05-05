@@ -33,7 +33,7 @@ namespace PaletteGenerator.ColorConverter
 
         public RGBColor CIELabToSRGB(CIELabColor color)
         {
-            var lab = new Lab(){ L = color.L, A = color.A, B = color.B };
+            var lab = new Lab() { L = color.L, A = color.A, B = color.B };
             var rgb = lab.To<Rgb>();
             return new RGBColor(rgb.R, rgb.G, rgb.B);
         }
@@ -42,6 +42,29 @@ namespace PaletteGenerator.ColorConverter
         {
             var rgb = new Rgb() { R = color.R, G = color.G, B = color.B };
             var lab = rgb.To<Lab>();
+            return new CIELabColor(lab.L, lab.A, lab.B);
+        }
+
+        public LMSColor CIELabToLMS(CIELabColor color)
+        {
+            var lab = new Lab() { L = color.L, A = color.A, B = color.B };
+            var xyz = lab.To<Xyz>();
+
+            double l = 0.4002 * xyz.X + 0.7076 * xyz.Y - 0.0808 * xyz.Z;
+            double m = -0.2263 * xyz.X + 1.1653 * xyz.Y + 0.0457 * xyz.Z;
+            double s = 0.0000 * xyz.X + 0.0000 * xyz.Y + 0.9182 * xyz.Z;
+
+            return new LMSColor(l, m, s);
+        }
+
+        public CIELabColor LMSToCIELab(LMSColor color)
+        {
+            double x = 1.8599 * color.L - 1.1294 * color.M + 0.2199 * color.S;
+            double y = 0.3612 * color.L + 0.6388 * color.M;
+            double z = 1.0891 * color.S;
+
+            var lab = new Xyz() { X = x, Y = y, Z = z }.To<Lab>();
+
             return new CIELabColor(lab.L, lab.A, lab.B);
         }
 

@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ColorBlindnessSimulator\ColorBlindnessSimulator.csproj" />
       <ProjectReference Include="..\ColorSpaces\ColorSpaces.csproj" />
     </ItemGroup>
 

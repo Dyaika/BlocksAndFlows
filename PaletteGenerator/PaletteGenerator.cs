@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using ColorBlindnessSimulator;
 using PaletteGenerator.ColorConverter;
 using PaletteGenerator.ColorConverter.ColorSpaces;
 
@@ -9,10 +11,12 @@ namespace PaletteGenerator
     public class PaletteGenerator : IPaletteGenerator
     {
         private IColorConverter _colorConverter;
+        private IColorBlindnessSimulator _blindnessSimulator;
 
-        public PaletteGenerator(IColorConverter colorConverter)
+        public PaletteGenerator(IColorConverter colorConverter, IColorBlindnessSimulator blindnessSimulator)
         {
             _colorConverter = colorConverter ?? throw new ArgumentNullException(nameof(colorConverter));
+            _blindnessSimulator = blindnessSimulator;
         }
 
         /// <inheritdoc />
@@ -25,27 +29,24 @@ namespace PaletteGenerator
 
             switch (type)
             {
-                case ColorBlindnessType.Protanopy:
-                    return GenerateProtanopyPalette(n);
-                case ColorBlindnessType.Deuteranopy:
-                    return GenerateDeuteranopyPalette(n);
-                case ColorBlindnessType.Tritanopy:
-                    return GenerateTritanopyPalette(n);
                 case ColorBlindnessType.Monochromacy:
                     return GenerateMonochromacyPalette(n);
                 case ColorBlindnessType.None:
+                case ColorBlindnessType.Protanopy:
+                case ColorBlindnessType.Deuteranopy:
+                case ColorBlindnessType.Tritanopy:
                 default:
-                    return GenerateDefaultPalette(n);
+                    return GenerateChromaticPalette(n, type);
             }
         }
 
-        private string[] GenerateDefaultPalette(int n)
+        private string[] GenerateChromaticPalette(int n, ColorBlindnessType type = ColorBlindnessType.None)
         {
             var palette = new List<CIELabColor>();
             var samples = new List<CIELabColor>();
             var random = new Random();
 
-            int nSamples = 100;
+            int nSamples = n * 100;
 
             for (int i = 0; i < nSamples; i++)
             {
@@ -55,65 +56,21 @@ namespace PaletteGenerator
 
                 var color = new CIELabColor(l, a, b);
 
-                samples.Add(color);
-            }
-
-            if (samples.Count == 0)
-                throw new Exception("No valid samples found!");
-
-            palette.Add(samples[random.Next(samples.Count)]);
-
-            while (palette.Count < n)
-            {
-                double maxMinDist = -1;
-                CIELabColor bestCandidate = null;
-
-                foreach (var sample in samples)
+                switch (type)
                 {
-                    double minDist = double.MaxValue;
-
-                    foreach (var existing in palette)
-                    {
-                        double dist = LabDistance(existing, sample);
-                        if (dist < minDist)
-                            minDist = dist;
-                    }
-
-                    if (minDist > maxMinDist)
-                    {
-                        maxMinDist = minDist;
-                        bestCandidate = sample;
-                    }
+                    case ColorBlindnessType.Protanopy:
+                        color = _blindnessSimulator.SimulateProtonapy(color);
+                        break;
+                    case ColorBlindnessType.Deuteranopy:
+                        color = _blindnessSimulator.SimulateDeuteranopy(color);
+                        break;
+                    case ColorBlindnessType.Tritanopy:
+                        color = _blindnessSimulator.SimulateTritanopy(color);
+                        break;
+                    case ColorBlindnessType.None:
+                    default:
+                        break;
                 }
-
-                palette.Add(bestCandidate);
-            }
-
-            var hexPalette = new string[n];
-            for (int i = 0; i < n; i++)
-            {
-                var rgb = _colorConverter.CIELabToSRGB(palette[i]);
-                hexPalette[i] = _colorConverter.sRGBToHex(rgb);
-            }
-
-            return hexPalette;
-        }
-
-        private string[] GenerateProtanopyPalette(int n)
-        {
-            var palette = new List<CIELabColor>();
-            var samples = new List<CIELabColor>();
-            var random = new Random();
-
-            int nSamples = 100;
-
-            for (int i = 0; i < nSamples; i++)
-            {
-                double l = CIELabColor.MinL + random.NextDouble() * (CIELabColor.MaxL - CIELabColor.MinL);
-                double a = CIELabColor.MinA + random.NextDouble() * (CIELabColor.MaxA - CIELabColor.MinA) / 2;
-                double b = CIELabColor.MinB + random.NextDouble() * (CIELabColor.MaxB - CIELabColor.MinB);
-
-                var color = new CIELabColor(l, a, b);
 
                 samples.Add(color);
             }
@@ -121,163 +78,76 @@ namespace PaletteGenerator
             if (samples.Count == 0)
                 throw new Exception("No valid samples found!");
 
-            palette.Add(samples[random.Next(samples.Count)]);
+            var centroids = samples.OrderBy(x => random.Next()).Take(n).ToList();
+            var clusters = new List<CIELabColor>[n];
+            bool changed;
+            int maxIterations = 10;
 
-            while (palette.Count < n)
+            for (int iter = 0; iter < maxIterations; iter++)
             {
-                double maxMinDist = -1;
-                CIELabColor bestCandidate = null;
+                changed = false;
+                for (int i = 0; i < n; i++)
+                    clusters[i] = new List<CIELabColor>();
 
                 foreach (var sample in samples)
                 {
-                    double minDist = double.MaxValue;
+                    int bestIndex = 0;
+                    double bestDist = DefaultCIELabDistance(sample, centroids[0]);
 
-                    foreach (var existing in palette)
+                    for (int i = 1; i < n; i++)
                     {
-                        double dist = LabDistance(existing, sample);
-                        if (dist < minDist)
-                            minDist = dist;
+                        double dist = DefaultCIELabDistance(sample, centroids[i]);
+                        if (dist < bestDist)
+                        {
+                            bestDist = dist;
+                            bestIndex = i;
+                        }
                     }
 
-                    if (minDist > maxMinDist)
+                    clusters[bestIndex].Add(sample);
+                }
+
+                for (int i = 0; i < n; i++)
+                {
+                    if (clusters[i].Count == 0) continue;
+
+                    var bestMedoid = centroids[i];
+                    double bestTotalDist = double.MaxValue;
+
+                    foreach (var candidate in clusters[i])
                     {
-                        maxMinDist = minDist;
-                        bestCandidate = sample;
+                        double totalDist = 0;
+                        foreach (var point in clusters[i])
+                            totalDist += DefaultCIELabDistance(candidate, point);
+
+                        if (totalDist < bestTotalDist)
+                        {
+                            bestTotalDist = totalDist;
+                            bestMedoid = candidate;
+                        }
+                    }
+
+                    if (!bestMedoid.Equals(centroids[i]))
+                    {
+                        centroids[i] = bestMedoid;
+                        changed = true;
                     }
                 }
 
-                palette.Add(bestCandidate);
+                if (!changed)
+                    break;
             }
 
             var hexPalette = new string[n];
             for (int i = 0; i < n; i++)
             {
-                var rgb = _colorConverter.CIELabToSRGB(palette[i]);
+                var rgb = _colorConverter.CIELabToSRGB(centroids[i]);
                 hexPalette[i] = _colorConverter.sRGBToHex(rgb);
             }
 
             return hexPalette;
         }
 
-        private string[] GenerateDeuteranopyPalette(int n)
-        {
-            var palette = new List<CIELabColor>();
-            var samples = new List<CIELabColor>();
-            var random = new Random();
-
-            int nSamples = 100;
-
-            for (int i = 0; i < nSamples; i++)
-            {
-                double l = CIELabColor.MinL + random.NextDouble() * (CIELabColor.MaxL - CIELabColor.MinL);
-                double a = CIELabColor.MaxA - random.NextDouble() * (CIELabColor.MaxA - CIELabColor.MinA) / 2;
-                double b = CIELabColor.MinB + random.NextDouble() * (CIELabColor.MaxB - CIELabColor.MinB);
-
-                var color = new CIELabColor(l, a, b);
-
-                samples.Add(color);
-            }
-
-            if (samples.Count == 0)
-                throw new Exception("No valid samples found!");
-
-            palette.Add(samples[random.Next(samples.Count)]);
-
-            while (palette.Count < n)
-            {
-                double maxMinDist = -1;
-                CIELabColor bestCandidate = null;
-
-                foreach (var sample in samples)
-                {
-                    double minDist = double.MaxValue;
-
-                    foreach (var existing in palette)
-                    {
-                        double dist = LabDistance(existing, sample);
-                        if (dist < minDist)
-                            minDist = dist;
-                    }
-
-                    if (minDist > maxMinDist)
-                    {
-                        maxMinDist = minDist;
-                        bestCandidate = sample;
-                    }
-                }
-
-                palette.Add(bestCandidate);
-            }
-
-            var hexPalette = new string[n];
-            for (int i = 0; i < n; i++)
-            {
-                var rgb = _colorConverter.CIELabToSRGB(palette[i]);
-                hexPalette[i] = _colorConverter.sRGBToHex(rgb);
-            }
-
-            return hexPalette;
-        }
-
-        private string[] GenerateTritanopyPalette(int n)
-        {
-            var palette = new List<CIELabColor>();
-            var samples = new List<CIELabColor>();
-            var random = new Random();
-
-            int nSamples = 100;
-
-            for (int i = 0; i < nSamples; i++)
-            {
-                double l = CIELabColor.MinL + random.NextDouble() * (CIELabColor.MaxL - CIELabColor.MinL);
-                double a = CIELabColor.MinA + random.NextDouble() * (CIELabColor.MaxA - CIELabColor.MinA);
-                double b = CIELabColor.MaxB - random.NextDouble() * (CIELabColor.MaxB - CIELabColor.MinB);
-
-                var color = new CIELabColor(l, a, b);
-
-                samples.Add(color);
-            }
-
-            if (samples.Count == 0)
-                throw new Exception("No valid samples found!");
-
-            palette.Add(samples[random.Next(samples.Count)]);
-
-            while (palette.Count < n)
-            {
-                double maxMinDist = -1;
-                CIELabColor bestCandidate = null;
-
-                foreach (var sample in samples)
-                {
-                    double minDist = double.MaxValue;
-
-                    foreach (var existing in palette)
-                    {
-                        double dist = LabDistance(existing, sample);
-                        if (dist < minDist)
-                            minDist = dist;
-                    }
-
-                    if (minDist > maxMinDist)
-                    {
-                        maxMinDist = minDist;
-                        bestCandidate = sample;
-                    }
-                }
-
-                palette.Add(bestCandidate);
-            }
-
-            var hexPalette = new string[n];
-            for (int i = 0; i < n; i++)
-            {
-                var rgb = _colorConverter.CIELabToSRGB(palette[i]);
-                hexPalette[i] = _colorConverter.sRGBToHex(rgb);
-            }
-
-            return hexPalette;
-        }
 
         private string[] GenerateMonochromacyPalette(int n)
         {
@@ -292,7 +162,7 @@ namespace PaletteGenerator
             return palette;
         }
 
-        private double LabDistance(CIELabColor c1, CIELabColor c2)
+        private double DefaultCIELabDistance(CIELabColor c1, CIELabColor c2)
         {
             return Math.Sqrt(
                 Math.Pow(c1.L - c2.L, 2) +

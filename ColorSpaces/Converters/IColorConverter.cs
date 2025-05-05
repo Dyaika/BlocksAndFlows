@@ -38,5 +38,19 @@ namespace PaletteGenerator.ColorConverter
         /// <param name="color">Color in sRGB</param>
         /// <returns>Color in CIE Lab</returns>
         CIELabColor SRGBToCIELab(RGBColor color);
+
+        /// <summary>
+        /// Converts CIE Lab to LMS
+        /// </summary>
+        /// <param name="color">Color in CIE Lab</param>
+        /// <returns>Color in LMS</returns>
+        LMSColor CIELabToLMS(CIELabColor color);
+
+        /// <summary>
+        /// Converts LMS to CIE Lab
+        /// </summary>
+        /// <param name="color">Color in LMS</param>
+        /// <returns>Color in CIE Lab</returns>
+        CIELabColor LMSToCIELab(LMSColor color);
     }
 }

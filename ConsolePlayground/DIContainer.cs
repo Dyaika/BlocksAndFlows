@@ -1,3 +1,4 @@
+using ColorBlindnessSimulator;
 using GraphicsHelper;
 using LevelGenerator;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ public static class DIContainer
         services.AddSingleton<ILevelGenerator, LevelGenerator.LevelGenerator>();
         services.AddSingleton<IImageConverter, ImageConverter>();
         services.AddSingleton<IColorConverter, ColorMineColorConverter>();
+        services.AddSingleton<IColorBlindnessSimulator, ColorBlindnessSimulator.ColorBlindnessSimulator>();
         services.AddSingleton<IPaletteGenerator, PaletteGenerator.PaletteGenerator>();
         return services.BuildServiceProvider();
     }
