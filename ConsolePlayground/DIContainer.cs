@@ -1,9 +1,9 @@
 using ColorBlindnessSimulator;
+using ColorSpaces.Converters;
 using GraphicsHelper;
 using LevelGenerator;
 using Microsoft.Extensions.DependencyInjection;
 using PaletteGenerator;
-using PaletteGenerator.ColorConverter;
 
 namespace ConsolePlayground;
 

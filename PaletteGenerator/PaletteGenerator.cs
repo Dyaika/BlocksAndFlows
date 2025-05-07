@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ColorBlindnessSimulator;
-using PaletteGenerator.ColorConverter;
-using PaletteGenerator.ColorConverter.ColorSpaces;
+using ColorSpaces.Converters;
+using ColorSpaces.Spaces;
 
 namespace PaletteGenerator
 {

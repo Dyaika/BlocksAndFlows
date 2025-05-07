@@ -1,4 +1,4 @@
-﻿using PaletteGenerator.ColorConverter.ColorSpaces;
+﻿using ColorSpaces.Spaces;
 
 namespace ColorBlindnessSimulator
 {

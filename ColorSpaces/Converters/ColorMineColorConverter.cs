@@ -1,8 +1,8 @@
 using System;
 using ColorMine.ColorSpaces;
-using PaletteGenerator.ColorConverter.ColorSpaces;
+using ColorSpaces.Spaces;
 
-namespace PaletteGenerator.ColorConverter
+namespace ColorSpaces.Converters
 {
     public class ColorMineColorConverter : IColorConverter
     {

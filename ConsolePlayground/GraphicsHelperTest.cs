@@ -1,10 +1,8 @@
-using System.Drawing;
+using ColorSpaces.Converters;
+using ColorSpaces.Spaces;
 using GraphicsHelper;
 using Microsoft.Extensions.DependencyInjection;
-using PaletteGenerator.ColorConverter;
-using PaletteGenerator.ColorConverter.ColorSpaces;
 using SixLabors.ImageSharp.PixelFormats;
-using ImageConverter = GraphicsHelper.ImageConverter;
 
 namespace ConsolePlayground;
 

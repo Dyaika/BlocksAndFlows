@@ -1,4 +1,4 @@
-namespace PaletteGenerator.ColorConverter.ColorSpaces
+namespace ColorSpaces.Spaces
 {
     /// <summary>
     /// Color space with human-like distances between colors
