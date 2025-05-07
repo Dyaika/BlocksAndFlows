@@ -2,4 +2,5 @@
 
 using ConsolePlayground;
 
-LevelGenTest.Run();
+var provider = DIContainer.RegisterServices();
+PaletteGeneratorTest.Run(provider);
