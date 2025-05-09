@@ -10,10 +10,10 @@ namespace LevelCore.Infrastructure
         /// </summary>
         /// <param name="level">Level</param>
         /// <returns>Game matrix with broken filters</returns>
-        public static Filter?[,] SimulateAsMatrix(this Level level)
+        public static Filter[,] SimulateAsMatrix(this Level level)
         {
             var matrix = level.AsGameMatrix();
-            var checkerRow = new Filter?[level.Width];
+            var checkerRow = new Filter[level.Width];
 
             // Put top row into the checker row
             for (var col = 0; col < level.Width; col++)

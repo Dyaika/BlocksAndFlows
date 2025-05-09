@@ -1,6 +1,6 @@
-using PaletteGenerator.ColorConverter.ColorSpaces;
+using ColorSpaces.Spaces;
 
-namespace PaletteGenerator.ColorConverter
+namespace ColorSpaces.Converters
 {
     public interface IColorConverter
     {

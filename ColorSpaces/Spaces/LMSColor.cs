@@ -1,4 +1,4 @@
-namespace PaletteGenerator.ColorConverter.ColorSpaces
+namespace ColorSpaces.Spaces
 {
     /// <summary>
     /// Physically correct color space

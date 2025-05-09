@@ -25,9 +25,9 @@ namespace LevelCore.Infrastructure
         /// <param name="level">Level</param>
         /// <returns>Game matrix</returns>
         /// <exception cref="BuildGameMatrixException">Impossible to build the game matrix</exception>
-        public static Filter?[,] AsGameMatrix(this Level level)
+        public static Filter[,] AsGameMatrix(this Level level)
         {
-            var matrix = new Filter?[level.Width, level.Height];
+            var matrix = new Filter[level.Width, level.Height];
             foreach (var block in level.Blocks)
             {
                 if (!block.IsInStorage)

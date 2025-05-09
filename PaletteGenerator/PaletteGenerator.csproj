@@ -1,13 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <Nullable>enable</Nullable>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageId>BlocksAndFlows.PaletteGenerator</PackageId>
+        <Version>1.0.1</Version>
+        <Authors>Dyaika</Authors>
+        <Description>Generates accessible color palettes</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/Dyaika/BlocksAndFlows</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ColorBlindnessSimulator\ColorBlindnessSimulator.csproj" />
-      <ProjectReference Include="..\ColorSpaces\ColorSpaces.csproj" />
+      <PackageReference Include="BlocksAndFlows.ColorBlindnessSimulator" Version="1.0.1" />
     </ItemGroup>
 
 </Project>
