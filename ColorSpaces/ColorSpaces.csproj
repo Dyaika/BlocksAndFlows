@@ -10,8 +10,4 @@
         <RepositoryUrl>https://github.com/Dyaika/BlocksAndFlows</RepositoryUrl>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="ColorMine" Version="1.1.3" />
-    </ItemGroup>
-
 </Project>

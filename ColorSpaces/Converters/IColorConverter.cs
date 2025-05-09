@@ -10,7 +10,7 @@ namespace ColorSpaces.Converters
         /// <param name="color">Color in sRGB</param>
         /// <returns>Color as hex string</returns>
         string sRGBToHex(RGBColor color);
-        
+
         /// <summary>
         /// Converts linear RGB to sRGB
         /// </summary>
@@ -26,6 +26,20 @@ namespace ColorSpaces.Converters
         RGBColor SRGBToLinearRGB(RGBColor color);
 
         /// <summary>
+        /// Converts sRGB to XYZ
+        /// </summary>
+        /// <param name="color">Color in sRGB</param>
+        /// <returns>Color in XYZ</returns>
+        XYZColor SRGBToXYZ(RGBColor color);
+
+        /// <summary>
+        /// Converts XYZ to sRGB
+        /// </summary>
+        /// <param name="color">Color in XYZ</param>
+        /// <returns>Color in sRGB</returns>
+        RGBColor XYZToSRGB(XYZColor color);
+
+        /// <summary>
         /// Converts CIE Lab to sRGB
         /// </summary>
         /// <param name="color">Color in CIE Lab</param>
@@ -38,6 +52,34 @@ namespace ColorSpaces.Converters
         /// <param name="color">Color in sRGB</param>
         /// <returns>Color in CIE Lab</returns>
         CIELabColor SRGBToCIELab(RGBColor color);
+
+        /// <summary>
+        /// Converts LMS to XYZ
+        /// </summary>
+        /// <param name="color">Color in LMS</param>
+        /// <returns>Color in XYZ</returns>
+        XYZColor LMStoXYZ(LMSColor color);
+
+        /// <summary>
+        /// Converts XYZ to LMS
+        /// </summary>
+        /// <param name="color">Color in XYZ</param>
+        /// <returns>Color in LMS</returns>
+        LMSColor XYZToLMS(XYZColor color);
+
+        /// <summary>
+        /// Converts XYZ to CIE Lab
+        /// </summary>
+        /// <param name="color">Color in XYZ</param>
+        /// <returns>Color in CIE Lab</returns>
+        CIELabColor XYZToCIELab(XYZColor color);
+
+        /// <summary>
+        /// Converts CIE Lab to XYZ
+        /// </summary>
+        /// <param name="color">Color in CIE Lab</param>
+        /// <returns>Color in XYZ</returns>
+        XYZColor CIELabToXYZ(CIELabColor color);
 
         /// <summary>
         /// Converts CIE Lab to LMS
