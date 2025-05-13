@@ -32,6 +32,11 @@ namespace LevelCore.Models
         /// </summary>
         public bool IsInStorage => _offset == -1;
 
+        /// <summary>
+        /// Identifier
+        /// </summary>
+        public int Id { get; set; }
+
         private readonly Filter[] _filters;
         private int _offset;
 
@@ -47,21 +52,21 @@ namespace LevelCore.Models
         /// Changes offset
         /// </summary>
         /// <param name="offset">New offset</param>
-        public void Move(int offset)
+        /// <returns>Was moved</returns>
+        public bool Move(int offset)
         {
-            if (IsStatic)
-            {
-                return;
-            }
-
             if (offset < 0)
             {
-                _offset = -1;
+                offset = -1;
             }
-            else
+
+            if (IsStatic || offset == _offset)
             {
-                _offset = offset;
+                return false;
             }
+
+            _offset = offset;
+            return true;
         }
     }
 }

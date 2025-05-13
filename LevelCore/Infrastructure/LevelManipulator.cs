@@ -1,3 +1,4 @@
+using System.Linq;
 using LevelCore.Exceptions;
 using LevelCore.Models;
 
@@ -19,6 +20,28 @@ namespace LevelCore.Infrastructure
             }
         }
 
+        public static bool MoveBlock(this Level level, int blockId, int offset)
+        {
+            var block = level.Blocks.First(b => b.Id == blockId);
+            var prevOffset = block.Offset;
+            if (!block.Move(offset))
+            {
+                return false;
+            }
+
+            try
+            {
+                level.AsGameMatrix();
+            }
+            catch (BuildGameMatrixException ex)
+            {
+                block.Move(prevOffset);
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Represents level as game matrix
         /// </summary>
@@ -36,15 +59,17 @@ namespace LevelCore.Infrastructure
                     var y = block.Offset / level.Width;
                     for (var i = 0; i < block.Filters.Length; i++)
                     {
-                        if (matrix[x+i, y] != null)
+                        if (matrix[x + i, y] != null)
                         {
                             throw new BuildGameMatrixException(
-                                $"Level is inconsistent, more than 1 filter in ({x+i}, {y}). Try disassemble level.");
+                                $"Level is inconsistent, more than 1 filter in ({x + i}, {y}). Try disassemble level.");
                         }
-                        matrix[x+i, y] = block.Filters[i];
+
+                        matrix[x + i, y] = block.Filters[i];
                     }
                 }
             }
+
             return matrix;
         }
     }

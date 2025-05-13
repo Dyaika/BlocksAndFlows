@@ -9,9 +9,17 @@ public static class LevelGenTest
 {
     public static void Run(ServiceProvider provider)
     {
+        var height = 5;
+        var id = 10;
         ILevelGenerator g = provider.GetService<ILevelGenerator>();
         Console.WriteLine("-----Generating level-----");
-        var level = g.GenerateLevel();
+        var level = g.GenerateLevel(7, height);
+        var content = LevelSerializer.Serialize(level);
+        var lv = LevelSerializer.Deserialize(content);
+        File.WriteAllText($"/mnt/HardDrive/downloads/Levels/level{id}.json", content);
+        Console.WriteLine("-----Level generated-----");
+        PrintMatrix(lv.SimulateAsMatrix());
+        Console.WriteLine("-----Score-----");
         Console.WriteLine("-----Level generated-----");
         PrintMatrix(level.SimulateAsMatrix());
         Console.WriteLine("-----Score-----");

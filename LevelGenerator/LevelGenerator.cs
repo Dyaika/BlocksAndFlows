@@ -27,6 +27,12 @@ public class LevelGenerator : ILevelGenerator
 
         // Make level
         var level = new Level(width, height, MatrixToBlocks(matrix));
+        var id = 0;
+        foreach (var block in level.Blocks)
+        {
+            block.Id = id++;
+        }
+
         if (disassemble)
         {
             level.Disassemble();
@@ -148,6 +154,7 @@ public class LevelGenerator : ILevelGenerator
                         blocks.Add(new Block(filters.ToArray(), offset, BlockType.Converter, false));
                         filters.Clear();
                     }
+
                     offset = width * row + col + 1;
                 }
             }
