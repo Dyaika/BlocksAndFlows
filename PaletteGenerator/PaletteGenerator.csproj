@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>BlocksAndFlows.PaletteGenerator</PackageId>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Authors>Dyaika</Authors>
         <Description>Generates accessible color palettes</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="BlocksAndFlows.ColorBlindnessSimulator" Version="1.0.1" />
+      <PackageReference Include="BlocksAndFlows.ColorBlindnessSimulator" Version="1.0.2" />
     </ItemGroup>
 
 </Project>
